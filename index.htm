@@ -105,22 +105,26 @@
       document.body.removeChild(link);
     });
 
+
     // Function to check if the protocol is installed
     document.getElementById('check-protocol-btn').addEventListener('click', function() {
-      try {
-        const testUrl = 'wolfinstaller:test';
-        const iframe = document.createElement('iframe');
-        iframe.style.display = 'none';
-        iframe.src = testUrl;
-        document.body.appendChild(iframe);
-        setTimeout(() => {
-          document.body.removeChild(iframe);
-          document.getElementById('run-script-step').classList.remove('hidden');
-          alert('Protocol is installed. You can now run the script.');
-        }, 1000);
-      } catch (e) {
+      const iframe = document.createElement('iframe');
+      iframe.style.display = 'none';
+      document.body.appendChild(iframe);
+
+      const timeout = setTimeout(() => {
+        document.body.removeChild(iframe);
         alert('Protocol is not installed. Please install the registry file and try again.');
-      }
+      }, 2000);
+
+      iframe.onload = () => {
+        clearTimeout(timeout);
+        document.body.removeChild(iframe);
+        document.getElementById('run-script-step').classList.remove('hidden');
+        alert('Protocol is installed. You can now run the script.');
+      };
+
+      iframe.src = 'wolfinstaller:';
     });
 
     // Function to run the script
