@@ -97,7 +97,11 @@
     document.getElementById('run-script-btn').addEventListener('click', function() {
       const command = 'start notepad.exe';
       const encodedCommand = encodeURIComponent(command);
-      window.location.href = `wolfinstaller:${encodedCommand}`;
+      const protocolCommand = `wolfinstaller:${encodedCommand}`;
+      const iframe = document.createElement('iframe');
+      iframe.style.display = 'none';
+      document.body.appendChild(iframe);
+      iframe.src = protocolCommand;
     });
   </script>
 </body>
