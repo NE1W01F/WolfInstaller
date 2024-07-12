@@ -93,19 +93,18 @@
   <script>
     // Function to create and download the registry file
     document.getElementById('download-reg-btn').addEventListener('click', function() {
-      const regContent = `
-      Windows Registry Editor Version 5.00
+      const regContent = `Windows Registry Editor Version 5.00
 
-      [HKEY_CLASSES_ROOT\\wolfinstaller]
-      @="URL:Wolf Installer Protocol"
-      "URL Protocol"=""
+[HKEY_CLASSES_ROOT\\wolfinstaller]
+@="URL:Wolf Installer Protocol"
+"URL Protocol"=""
 
-      [HKEY_CLASSES_ROOT\\wolfinstaller\\shell]
+[HKEY_CLASSES_ROOT\\wolfinstaller\\shell]
 
-      [HKEY_CLASSES_ROOT\\wolfinstaller\\shell\\open]
+[HKEY_CLASSES_ROOT\\wolfinstaller\\shell\\open]
 
-      [HKEY_CLASSES_ROOT\\wolfinstaller\\shell\\open\\command]
-      @="powershell.exe -WindowStyle Hidden -Command \"iex ([string]([System.Uri]::UnescapeDataString('%1') -replace 'wolfinstaller:'))\""
+[HKEY_CLASSES_ROOT\\wolfinstaller\\shell\\open\\command]
+@="powershell.exe -WindowStyle Hidden -Command \"iex ([string]([System.Uri]::UnescapeDataString('%1') -replace 'wolfinstaller:'))\""
       `;
       const blob = new Blob([regContent], { type: 'application/octet-stream' });
       const link = document.createElement('a');
